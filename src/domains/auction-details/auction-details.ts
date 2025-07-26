@@ -3,7 +3,7 @@ import {
     Extension
 } from '@1inch/fusion-sdk'
 import {AuctionPoint} from './types'
-import {hashForSolana} from './hasher'
+import {hashForSolana, hashForTon} from './hasher'
 import {now} from '../../utils'
 
 export class AuctionDetails extends BaseAuctionDetails {
@@ -64,6 +64,10 @@ export class AuctionDetails extends BaseAuctionDetails {
 
     public hashForSolana(): Buffer {
         return hashForSolana(this)
+    }
+
+    public hashForTon(): Buffer {
+        return hashForTon(this)
     }
 }
 
