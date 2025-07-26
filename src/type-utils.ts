@@ -1,5 +1,5 @@
-import {EvmChain, SolanaChain, SupportedChain} from './chains'
-import {EvmAddress, SolanaAddress} from './domains'
+import {EvmChain, SolanaChain, TonChain, SupportedChain} from './chains'
+import {EvmAddress, SolanaAddress, TonAddress} from './domains'
 
 export type TupleToUnion<ArrayType> = ArrayType extends readonly unknown[]
     ? ArrayType[number]
@@ -10,7 +10,9 @@ export type AddressForChain<Chain extends SupportedChain> =
         ? EvmAddress
         : Chain extends SolanaChain
           ? SolanaAddress
-          : never
+          : Chain extends TonChain
+            ? TonAddress
+            : never
 
 export type FixedLengthArray<
     T,

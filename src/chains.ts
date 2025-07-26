@@ -14,7 +14,9 @@ export enum NetworkEnum {
     LINEA = 59144,
     SONIC = 146,
     UNICHAIN = 130,
-    SOLANA = 501
+    SOLANA = 501,
+    TON_MAINNET = 607,
+    TON_TESTNET = 608
 }
 
 export const SupportedChains = [
@@ -30,7 +32,9 @@ export const SupportedChains = [
     NetworkEnum.LINEA,
     NetworkEnum.SONIC,
     NetworkEnum.UNICHAIN,
-    NetworkEnum.SOLANA
+    NetworkEnum.SOLANA,
+    NetworkEnum.TON_MAINNET,
+    NetworkEnum.TON_TESTNET
 ] as const
 
 type UnsupportedChain = Exclude<
@@ -39,8 +43,9 @@ type UnsupportedChain = Exclude<
 >
 
 export type SupportedChain = Exclude<NetworkEnum, UnsupportedChain>
-export type EvmChain = Exclude<SupportedChain, NetworkEnum.SOLANA>
+export type EvmChain = Exclude<SupportedChain, NetworkEnum.SOLANA | NetworkEnum.TON_MAINNET | NetworkEnum.TON_TESTNET>
 export type SolanaChain = NetworkEnum.SOLANA
+export type TonChain = NetworkEnum.TON_MAINNET | NetworkEnum.TON_TESTNET
 
 export const isSupportedChain = (chain: unknown): chain is SupportedChain =>
     SupportedChains.includes(chain as number)
@@ -48,10 +53,30 @@ export const isSupportedChain = (chain: unknown): chain is SupportedChain =>
 export const isEvm = (chain: SupportedChain): chain is EvmChain => {
     return (
         SupportedChains.includes(chain as number) &&
-        chain !== NetworkEnum.SOLANA
+        chain !== NetworkEnum.SOLANA &&
+        chain !== NetworkEnum.TON_MAINNET &&
+        chain !== NetworkEnum.TON_TESTNET
     )
 }
 
 export const isSolana = (chain: SupportedChain): chain is SolanaChain => {
     return chain === NetworkEnum.SOLANA
+}
+
+export const isTon = (chain: SupportedChain): chain is TonChain => {
+    return (
+        chain === NetworkEnum.TON_MAINNET || chain === NetworkEnum.TON_TESTNET
+    )
+}
+
+export const isTonMainnet = (
+    chain: SupportedChain
+): chain is NetworkEnum.TON_MAINNET => {
+    return chain === NetworkEnum.TON_MAINNET
+}
+
+export const isTonTestnet = (
+    chain: SupportedChain
+): chain is NetworkEnum.TON_TESTNET => {
+    return chain === NetworkEnum.TON_TESTNET
 }
