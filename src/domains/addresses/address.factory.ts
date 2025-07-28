@@ -18,16 +18,26 @@ export function createAddress<Chain extends SupportedChain>(
     if (isTon(chainId)) {
         if (complement) {
             const evm = EvmAddress.fromUnknown(address)
-            return TonAddress.fromParts([complement, evm]) as AddressForChain<Chain>
+
+            return TonAddress.fromParts([
+                complement,
+                evm
+            ]) as AddressForChain<Chain>
         }
+
         return TonAddress.fromUnknown(address) as AddressForChain<Chain>
     }
 
     if (isSolana(chainId)) {
         if (complement) {
             const evm = EvmAddress.fromUnknown(address)
-            return SolanaAddress.fromParts([complement, evm]) as AddressForChain<Chain>
+
+            return SolanaAddress.fromParts([
+                complement,
+                evm
+            ]) as AddressForChain<Chain>
         }
+
         return SolanaAddress.fromUnknown(address) as AddressForChain<Chain>
     }
 

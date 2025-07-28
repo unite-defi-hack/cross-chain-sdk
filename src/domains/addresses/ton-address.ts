@@ -14,9 +14,14 @@ import {isBigintString} from '../../utils/numbers/is-bigint-string'
  */
 export class TonAddress implements AddressLike {
     public static readonly ZERO = TonAddress.fromRaw(0, Buffer.alloc(32))
+
     public static readonly NATIVE = TonAddress.fromRaw(0, Buffer.alloc(32, 1))
+
     // For cross-chain compatibility, use the same address as NATIVE for TON
-    public static readonly WRAPPED_NATIVE = TonAddress.fromRaw(0, Buffer.alloc(32, 1))
+    public static readonly WRAPPED_NATIVE = TonAddress.fromRaw(
+        0,
+        Buffer.alloc(32, 1)
+    )
 
     private readonly address: Address
 
@@ -37,7 +42,10 @@ export class TonAddress implements AddressLike {
 
     static fromRaw(workchain: number, hash: Buffer): TonAddress {
         TonAddress.validateWorkchainStatic(workchain)
-        return new TonAddress(Address.parseRaw(`${workchain}:${hash.toString('hex')}`))
+
+        return new TonAddress(
+            Address.parseRaw(`${workchain}:${hash.toString('hex')}`)
+        )
     }
 
     static fromFriendly(address: string): TonAddress {
@@ -61,18 +69,21 @@ export class TonAddress implements AddressLike {
         const buffer = hexToUint8Array(
             '0x' + val.toString(16).padStart(72, '0') // 72 hex chars = 36 bytes
         )
+
         return TonAddress.fromBuffer(buffer)
     }
 
     static fromBuffer(buf: Buffer | Uint8Array): TonAddress {
         if (buf.length !== 36) {
-            throw new Error('TON address buffer must be 36 bytes (4 bytes workchain + 32 bytes hash)')
+            throw new Error(
+                'TON address buffer must be 36 bytes (4 bytes workchain + 32 bytes hash)'
+            )
         }
 
         const buffer = Buffer.from(buf)
         const workchain = buffer.readInt32BE(0)
         const hash = buffer.subarray(4, 36)
-        
+
         return TonAddress.fromRaw(workchain, hash)
     }
 
@@ -85,6 +96,7 @@ export class TonAddress implements AddressLike {
             if (isBigintString(val)) {
                 return TonAddress.fromBigInt(BigInt(val))
             }
+
             return new TonAddress(val)
         }
 
@@ -98,6 +110,7 @@ export class TonAddress implements AddressLike {
             typeof val.toBuffer === 'function'
         ) {
             const buffer = val.toBuffer()
+
             if (buffer instanceof Buffer || buffer instanceof Uint8Array) {
                 return TonAddress.fromBuffer(buffer)
             }
@@ -108,13 +121,17 @@ export class TonAddress implements AddressLike {
 
     private static validateWorkchainStatic(workchain: number): void {
         if (workchain !== 0) {
-            throw new Error('Only workchain 0 addresses are supported for swaps')
+            throw new Error(
+                'Only workchain 0 addresses are supported for swaps'
+            )
         }
     }
 
     private validateWorkchain(): void {
         if (this.address.workChain !== 0) {
-            throw new Error('Only workchain 0 addresses are supported for swaps')
+            throw new Error(
+                'Only workchain 0 addresses are supported for swaps'
+            )
         }
     }
 
@@ -144,6 +161,7 @@ export class TonAddress implements AddressLike {
         const buffer = Buffer.alloc(36)
         buffer.writeInt32BE(this.address.workChain, 0)
         buffer.set(this.address.hash, 4)
+
         return buffer
     }
 
@@ -151,6 +169,7 @@ export class TonAddress implements AddressLike {
         if (other instanceof TonAddress) {
             return this.address.equals(other.address)
         }
+
         return this.toBuffer().equals(other.toBuffer())
     }
 
@@ -172,6 +191,7 @@ export class TonAddress implements AddressLike {
 
     public splitToParts(): [AddressComplement, EvmAddress] {
         const bn = this.toBigint()
+
         return [
             new AddressComplement(bn >> 160n),
             EvmAddress.fromBigInt(bn & UINT_160_MAX)

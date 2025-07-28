@@ -54,8 +54,12 @@ describe('TonCrossChainOrder', () => {
             const order = createTestOrder()
 
             expect(order).toBeInstanceOf(TonCrossChainOrder)
-            expect(order.maker.toString()).toContain(TEST_ADDRESSES.TON_MAKER.substring(0, 10))
-            expect(order.makerAsset.toString()).toContain(TEST_ADDRESSES.TON_TOKEN.substring(0, 10))
+            expect(order.maker.toString()).toContain(
+                TEST_ADDRESSES.TON_MAKER.substring(0, 10)
+            )
+            expect(order.makerAsset.toString()).toContain(
+                TEST_ADDRESSES.TON_TOKEN.substring(0, 10)
+            )
             expect(order.makingAmount).toBe(1000000000n)
             expect(order.takingAmount).toBe(2000n * 10n ** 6n)
         })
@@ -77,24 +81,30 @@ describe('TonCrossChainOrder', () => {
                 srcSafetyDeposit: 100000000n,
                 dstSafetyDeposit: 50n * 10n ** 6n,
                 timeLocks: TimeLocks.new({
-                srcWithdrawal: 1n,
-                srcPublicWithdrawal: 2n,
-                srcCancellation: 3n,
-                srcPublicCancellation: 4n,
-                dstWithdrawal: 1n,
-                dstPublicWithdrawal: 2n,
-                dstCancellation: 3n
-            })
+                    srcWithdrawal: 1n,
+                    srcPublicWithdrawal: 2n,
+                    srcCancellation: 3n,
+                    srcPublicCancellation: 4n,
+                    dstWithdrawal: 1n,
+                    dstPublicWithdrawal: 2n,
+                    dstCancellation: 3n
+                })
             }
 
             const details = {
                 auction: AuctionDetails.noAuction(120n, BigInt(now()))
             }
 
-            const order = TonCrossChainOrder.new(orderInfo, escrowParams, details)
+            const order = TonCrossChainOrder.new(
+                orderInfo,
+                escrowParams,
+                details
+            )
 
             expect(order.srcAssetIsNative).toBe(true)
-            expect(order.makerAsset.toString()).toBe(TonAddress.WRAPPED_NATIVE.toString())
+            expect(order.makerAsset.toString()).toBe(
+                TonAddress.WRAPPED_NATIVE.toString()
+            )
         })
 
         it('should validate chain requirements', () => {
@@ -114,14 +124,14 @@ describe('TonCrossChainOrder', () => {
                 srcSafetyDeposit: 100000000n,
                 dstSafetyDeposit: 50n * 10n ** 6n,
                 timeLocks: TimeLocks.new({
-                srcWithdrawal: 1n,
-                srcPublicWithdrawal: 2n,
-                srcCancellation: 3n,
-                srcPublicCancellation: 4n,
-                dstWithdrawal: 1n,
-                dstPublicWithdrawal: 2n,
-                dstCancellation: 3n
-            })
+                    srcWithdrawal: 1n,
+                    srcPublicWithdrawal: 2n,
+                    srcCancellation: 3n,
+                    srcPublicCancellation: 4n,
+                    dstWithdrawal: 1n,
+                    dstPublicWithdrawal: 2n,
+                    dstCancellation: 3n
+                })
             }
 
             const details = {
@@ -150,14 +160,14 @@ describe('TonCrossChainOrder', () => {
                 srcSafetyDeposit: 100000000n,
                 dstSafetyDeposit: 50n * 10n ** 6n,
                 timeLocks: TimeLocks.new({
-                srcWithdrawal: 1n,
-                srcPublicWithdrawal: 2n,
-                srcCancellation: 3n,
-                srcPublicCancellation: 4n,
-                dstWithdrawal: 1n,
-                dstPublicWithdrawal: 2n,
-                dstCancellation: 3n
-            })
+                    srcWithdrawal: 1n,
+                    srcPublicWithdrawal: 2n,
+                    srcCancellation: 3n,
+                    srcPublicCancellation: 4n,
+                    dstWithdrawal: 1n,
+                    dstPublicWithdrawal: 2n,
+                    dstCancellation: 3n
+                })
             }
 
             const details = {
@@ -234,7 +244,9 @@ describe('TonCrossChainOrder', () => {
             const deserialized = TonCrossChainOrder.fromJSON(json)
 
             expect(deserialized.maker.toString()).toBe(order.maker.toString())
-            expect(deserialized.makerAsset.toString()).toBe(order.makerAsset.toString())
+            expect(deserialized.makerAsset.toString()).toBe(
+                order.makerAsset.toString()
+            )
             expect(deserialized.makingAmount).toBe(order.makingAmount)
             expect(deserialized.takingAmount).toBe(order.takingAmount)
             expect(deserialized.dstChainId).toBe(order.dstChainId)
@@ -282,21 +294,25 @@ describe('TonCrossChainOrder', () => {
                 srcSafetyDeposit: 100000000n,
                 dstSafetyDeposit: 50n * 10n ** 6n,
                 timeLocks: TimeLocks.new({
-                srcWithdrawal: 1n,
-                srcPublicWithdrawal: 2n,
-                srcCancellation: 3n,
-                srcPublicCancellation: 4n,
-                dstWithdrawal: 1n,
-                dstPublicWithdrawal: 2n,
-                dstCancellation: 3n
-            })
+                    srcWithdrawal: 1n,
+                    srcPublicWithdrawal: 2n,
+                    srcCancellation: 3n,
+                    srcPublicCancellation: 4n,
+                    dstWithdrawal: 1n,
+                    dstPublicWithdrawal: 2n,
+                    dstCancellation: 3n
+                })
             }
 
             const details = {
                 auction: AuctionDetails.noAuction(120n, BigInt(now()))
             }
 
-            const order2 = TonCrossChainOrder.new(order2Info, escrowParams, details)
+            const order2 = TonCrossChainOrder.new(
+                order2Info,
+                escrowParams,
+                details
+            )
 
             const hash1 = order.getOrderHash(NetworkEnum.TON_MAINNET)
             const hash2 = order2.getOrderHash(NetworkEnum.TON_MAINNET)
@@ -324,12 +340,17 @@ describe('TonCrossChainOrder', () => {
 
             expect(calculator).toBeDefined()
             // Calculator should have zero taker fee for TON
-            expect(calculator.calcRateBump(order.auctionStartTime, 0n)).toBeGreaterThanOrEqual(0n)
+            expect(
+                calculator.calcRateBump(order.auctionStartTime, 0n)
+            ).toBeGreaterThanOrEqual(0n)
         })
 
         it('should calculate taking amounts', () => {
             const currentTime = order.auctionStartTime + 60n // 1 minute into auction
-            const takingAmount = order.calcTakingAmount(order.makingAmount, currentTime)
+            const takingAmount = order.calcTakingAmount(
+                order.makingAmount,
+                currentTime
+            )
 
             expect(takingAmount).toBeGreaterThanOrEqual(order.takingAmount)
         })

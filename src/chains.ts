@@ -43,7 +43,10 @@ type UnsupportedChain = Exclude<
 >
 
 export type SupportedChain = Exclude<NetworkEnum, UnsupportedChain>
-export type EvmChain = Exclude<SupportedChain, NetworkEnum.SOLANA | NetworkEnum.TON_MAINNET | NetworkEnum.TON_TESTNET>
+export type EvmChain = Exclude<
+    SupportedChain,
+    NetworkEnum.SOLANA | NetworkEnum.TON_MAINNET | NetworkEnum.TON_TESTNET
+>
 export type SolanaChain = NetworkEnum.SOLANA
 export type TonChain = NetworkEnum.TON_MAINNET | NetworkEnum.TON_TESTNET
 
