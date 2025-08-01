@@ -15,13 +15,10 @@ import {isBigintString} from '../../utils/numbers/is-bigint-string'
 export class TonAddress implements AddressLike {
     public static readonly ZERO = TonAddress.fromRaw(0, Buffer.alloc(32))
 
-    public static readonly NATIVE = TonAddress.fromRaw(0, Buffer.alloc(32, 1))
+    public static readonly NATIVE = TonAddress.fromString('EQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAM9c')
 
     // For cross-chain compatibility, use the same address as NATIVE for TON
-    public static readonly WRAPPED_NATIVE = TonAddress.fromRaw(
-        0,
-        Buffer.alloc(32, 1)
-    )
+    public static readonly WRAPPED_NATIVE = TonAddress.fromString('EQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAM9c')
 
     private readonly address: Address
 
