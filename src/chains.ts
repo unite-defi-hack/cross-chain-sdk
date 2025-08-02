@@ -16,7 +16,8 @@ export enum NetworkEnum {
     UNICHAIN = 130,
     SOLANA = 501,
     TON_MAINNET = 607,
-    TON_TESTNET = 608
+    TON_TESTNET = 608,
+    ETHEREUM_SEPOLIA = 11155111,
 }
 
 export const SupportedChains = [
@@ -34,7 +35,8 @@ export const SupportedChains = [
     NetworkEnum.UNICHAIN,
     NetworkEnum.SOLANA,
     NetworkEnum.TON_MAINNET,
-    NetworkEnum.TON_TESTNET
+    NetworkEnum.TON_TESTNET,
+    NetworkEnum.ETHEREUM_SEPOLIA,
 ] as const
 
 type UnsupportedChain = Exclude<

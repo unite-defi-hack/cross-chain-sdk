@@ -2,7 +2,7 @@ import {NetworkEnum} from './chains'
 import {EvmAddress} from './domains/addresses'
 
 const TrueERC20 = EvmAddress.fromString(
-    '0xda0000d4000015a526378bb6fafc650cea5966f8'
+    '0xEC0396430645C294Ff99b8D71c93f74BC94119fA'
 )
 const ZKTrueERC20 = EvmAddress.fromString(
     '0xd66097c27eb8dee404bac235737932260edc6f3b'
@@ -21,7 +21,8 @@ export const TRUE_ERC20 = {
     [NetworkEnum.ZKSYNC]: ZKTrueERC20,
     [NetworkEnum.LINEA]: TrueERC20,
     [NetworkEnum.SONIC]: TrueERC20,
-    [NetworkEnum.UNICHAIN]: TrueERC20
+    [NetworkEnum.UNICHAIN]: TrueERC20,
+    [NetworkEnum.ETHEREUM_SEPOLIA]: TrueERC20,
 }
 
 const ESCROW_FACTORY_ADDRESS = EvmAddress.fromString(
