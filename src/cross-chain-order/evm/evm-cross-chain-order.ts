@@ -27,6 +27,42 @@ import {isEvm, isSupportedChain, SupportedChain} from '../../chains'
 import {HashLock} from '../../domains/hash-lock'
 import {TimeLocks} from '../../domains/time-locks'
 import {bufferFromHex} from '../../utils/bytes'
+import { ethers } from 'ethers'
+
+const MOLE_SWAP_LOP_ADDRESS = "0x991f286348580c1d2206843D5CfD7863Ff29eB15";
+
+const EIP712Domain = [
+    {name: 'name', type: 'string'},
+    {name: 'version', type: 'string'},
+    {name: 'chainId', type: 'uint256'},
+    {name: 'verifyingContract', type: 'address'}
+]
+
+const Order = [
+    {name: 'salt', type: 'uint256'},
+    {name: 'maker', type: 'address'},
+    {name: 'receiver', type: 'address'},
+    {name: 'makerAsset', type: 'address'},
+    {name: 'takerAsset', type: 'address'},
+    {name: 'makingAmount', type: 'uint256'},
+    {name: 'takingAmount', type: 'uint256'},
+    {name: 'makerTraits', type: 'uint256'}
+]
+
+function buildOrderTypedData(
+    chainId: number,
+    verifyingContract: string,
+    name: string,
+    version: string,
+    order: LimitOrderV4Struct
+): EIP712TypedData {
+    return {
+        primaryType: 'Order',
+        types: {EIP712Domain, Order},
+        domain: {name, version, chainId, verifyingContract},
+        message: order
+    }
+}
 
 export class EvmCrossChainOrder extends BaseOrder<
     EvmAddress,
@@ -266,7 +302,24 @@ export class EvmCrossChainOrder extends BaseOrder<
     }
 
     public getOrderHash(srcChainId: number): string {
-        return this.inner.getOrderHash(srcChainId)
+        // hack to calculate hash custom LOP
+
+        const typedData = buildOrderTypedData(
+            srcChainId,
+            MOLE_SWAP_LOP_ADDRESS,
+            "1inch Limit Order Protocol",
+            "4",
+            this.build()
+          );
+          const domainForSignature = {
+            ...typedData.domain,
+            chainId: srcChainId,
+          };
+        return ethers.TypedDataEncoder.hash(
+            domainForSignature,
+            { Order: typedData.types.Order },
+            typedData.message
+          );
     }
 
     public getOrderHashBuffer(srcChainId: number): Buffer {
@@ -274,7 +327,26 @@ export class EvmCrossChainOrder extends BaseOrder<
     }
 
     public getTypedData(srcChainId: number): EIP712TypedData {
-        return this.inner.getTypedData(srcChainId)
+
+      const typedData = buildOrderTypedData(
+        srcChainId,
+        MOLE_SWAP_LOP_ADDRESS,
+        "1inch Limit Order Protocol",
+        "4",
+        this.build()
+      );
+    
+      const domainForSignature = {
+        ...typedData.domain,
+        chainId: srcChainId,
+      };
+
+      return {
+        primaryType: 'Order',
+        domain: domainForSignature,
+        types: { Order: typedData.types.Order },
+        message: typedData.message
+      };
     }
 
     public getCalculator(): AuctionCalculator {
