@@ -93,8 +93,8 @@ export class TonCrossChainOrder extends BaseOrder<
             orderExpirationDelay
 
         assertUInteger(deadline)
-        assertUInteger(orderInfo.makingAmount)
-        assertUInteger(orderInfo.takingAmount)
+        assertUInteger(orderInfo.makingAmount, UINT_64_MAX)
+        assertUInteger(orderInfo.takingAmount, UINT_64_MAX)
 
         const source = extra.source ?? TonCrossChainOrder.DefaultExtra.source!
         const isSaltContainsSource = extra.salt && extra.salt > UINT_32_MAX
